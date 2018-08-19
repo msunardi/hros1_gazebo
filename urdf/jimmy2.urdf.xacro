@@ -43,6 +43,12 @@
     <xacro:property name="left_elbow_bracket_origin">
         <origin xyz="0 0 -0.4" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="left_elbow_joint_origin">
+        <origin xyz="0.1599 0 -0.4085" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="left_elbow_block_origin">
+        <origin xyz="0 -0.0168 -0.14" rpy="0 0 0"/>
+    </xacro:property>
 
     <xacro:property name="right_sho_pitch_block_origin">
         <origin xyz="0 -0.45 0.14" rpy="0 0 0"/>
@@ -204,30 +210,30 @@
     <joint name="left_elbow_joint" type="continuous">
         <parent link="left_elbow_bracket"/>
         <child link="left_elbow_block"/>
-        <xacro:insert_block name="left_elbow_bracket_joint_origin"/>
+        <xacro:insert_block name="left_elbow_joint_origin"/>
         <axis xyz="0 -1 0"/>
         <dynamics damping="0.7"/>
     </joint>
 
     <link name="left_elbow_block">
-        <!-- <collision>
-            <xacro:insert_block name="left_sho_roll_block_origin"/>
+        <collision>
+            <xacro:insert_block name="left_elbow_block_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
         </collision>
         <visual>
-            <xacro:insert_block name="left_sho_roll_block_origin"/>
+            <xacro:insert_block name="left_elbow_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_sho_roll.dae"/>
+                <mesh filename="package://test_description/meshes2/left_elbow_pitch.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
         <inertial>
-            <xacro:insert_block name="left_sho_roll_block_origin"/>
+            <xacro:insert_block name="left_elbow_block_origin"/>
             <mass value="${mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
-        </inertial> -->
+        </inertial>
     </link>
 
 
