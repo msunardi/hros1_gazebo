@@ -10,9 +10,9 @@
     <xacro:property name="height1" value="2" /> <!-- Link 1 -->
     <xacro:property name="height2" value="1" /> <!-- Link 2 -->
     <xacro:property name="height3" value="1" /> <!-- Link 3 -->
-    <xacro:property name="base_height" value="0.5" />
+    <xacro:property name="base_height" value="1.0" />
     <xacro:property name="torso_origin">
-        <origin xyz="0 0 ${height2/2}" rpy="0 0 0"/>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="link2_origin">
         <origin xyz="0 0 ${ax12_height/2 - axeleft_offset}" rpy="0 0 0"/>
@@ -21,7 +21,7 @@
         <origin xyz="0 0 ${ax12_height/2 - axeleft_offset}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="base_box">
-        <box size="0.5 1.0 ${base_height}"/>
+        <box size="0.5 1.2 ${base_height}"/>
     </xacro:property>
     <xacro:property name="base_origin">
         <origin xyz="0 0 -${base_height/2}" rpy="0 0 0"/>
@@ -61,7 +61,7 @@
     </xacro:property>
 
     <xacro:property name="right_sho_pitch_block_origin">
-        <origin xyz="0 -0.45 0.14" rpy="0 0 0"/>
+        <origin xyz="0 -0.44 0.14" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="right_sho_pitch_joint_origin">
         <origin xyz="0.14 -0.655 0.14" rpy="0 0 0"/>
@@ -90,7 +90,30 @@
     <xacro:property name="right_hand_origin">
         <origin xyz="0 0 -0.4" rpy="0 0 0"/>
     </xacro:property>
-
+    <xacro:property name="neck_pan_joint_origin">
+        <origin xyz="0.2 0 0.87" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="neck_pan_block_origin">
+        <origin xyz="-0.1385 0 0.218" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="neck_pan_top_bracket_joint_origin">
+        <origin xyz="-0.14 0 0.39" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="neck_pan_top_bracket_origin">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="neck_tilt_bottom_bracket_joint_origin">
+        <origin xyz="0.113 0 0.09" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="neck_tilt_bottom_bracket_origin">
+        <origin xyz="-0.12 0 0.06" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="head_tilt_bracket_joint_origin">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="head_tilt_block_origin">
+        <origin xyz="-0.12 0 0.22" rpy="0 0 0"/>
+    </xacro:property>
 
     <xacro:property name="ax12_block_inertia">
         <inertia
@@ -135,7 +158,7 @@
     <joint name="torso_fixed" type="fixed">
         <parent link="base"/>
         <child link="torso"/>
-        <origin xyz="0 0 ${base_height}" rpy="0 0 0"/>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
     </joint>
 
     <!-- Base Link (Torso) -->
@@ -164,7 +187,7 @@
     <joint name="left_sho_block_mount" type="fixed">
         <parent link="torso"/>
         <child link="left_sho_pitch_block"/>
-        <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0" />
     </joint>
 
     <!-- Middle Link -->
@@ -338,7 +361,7 @@
     <joint name="right_sho_block_mount" type="fixed">
         <parent link="torso"/>
         <child link="right_sho_pitch_block"/>
-        <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0" />
     </joint>
 
     <!-- Middle Link -->
@@ -528,45 +551,119 @@
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
     </link>
+    <!-- end of Top Link -->
 
-    <!-- <joint name="fixed3" type="fixed">
-        <parent link="world"/>
-        <child link="right_elbow_block"/>
-    </joint> -->
-
-    <!-- end of Base Link -->
-
-    <!-- <joint name="joint2" type="continuous">
+    <joint name="neck_pan" type="continuous">
         <parent link="torso"/>
-        <child link="link3"/>
-        <origin xyz="0 ${ax12_depth} ${ax12_height - axeright_offset}" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/>
+        <child link="neck_pan_block"/>
+        <xacro:insert_block name="neck_pan_joint_origin"/>
+        <axis xyz="0 0 1"/>
         <dynamics damping="0.7"/>
-    </joint> -->
+    </joint>
 
-    <!-- Top Link -->
-    <!-- <link name="link3">
+    <link name="neck_pan_block">
         <collision>
-            <xacro:insert_block name="link3_origin"/>
+            <xacro:insert_block name="neck_pan_block_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
         </collision>
         <visual>
-            <xacro:insert_block name="link3_origin"/>
+            <xacro:insert_block name="neck_pan_block_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <mesh filename="package://test_description/meshes2/neck_base.dae"/>
             </geometry>
-            <material name="orange"/>
+            <material name="black"/>
         </visual>
         <inertial>
-            <xacro:insert_block name="link3_origin"/>
+            <xacro:insert_block name="neck_pan_block_origin"/>
             <mass value="${mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
-    </link> -->
+    </link>
 
-    <!-- end of Top Link -->
+    <joint name="neck_pan_top_bracket_joint" type="fixed">
+        <parent link="neck_pan_block" />
+        <child link="neck_pan_top_bracket" />
+        <xacro:insert_block name="neck_pan_top_bracket_joint_origin" />
+    </joint>
+
+    <link name="neck_pan_top_bracket">
+        <collision>
+            <xacro:insert_block name="neck_pan_top_bracket_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="neck_pan_top_bracket_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/neck_bottom.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="neck_pan_top_bracket_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <joint name="neck_tilt_bottom_bracket_passive_joint" type="continuous">
+        <parent link="neck_pan_top_bracket" />
+        <child link="neck_tilt_bottom_bracket" />
+        <xacro:insert_block name="neck_tilt_bottom_bracket_joint_origin"/>
+        <axis xyz="0 1.0 0"/>
+        <dynamics damping="0.7"/>
+    </joint>
+
+    <link name="neck_tilt_bottom_bracket">
+        <collision>
+            <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/neck_top.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <joint name="head_tilt_bracket_joint" type="fixed">
+        <parent link="neck_tilt_bottom_bracket" />
+        <child link="head_tilt_block" />
+        <xacro:insert_block name="head_tilt_bracket_joint_origin" />
+    </joint>
+
+    <link name="head_tilt_block">
+        <collision>
+            <xacro:insert_block name="head_tilt_block_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="head_tilt_block_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/head_tilt.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="head_tilt_block_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
 
     <!-- Transmissions -->
     <transmission name="tran1">
