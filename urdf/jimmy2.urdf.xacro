@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot name="test_myrobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:property name="mass" value="1" />
+    <xacro:property name="mass" value="0.2" />
+    <xacro:property name="bracket_mass" value="0.01" />
     <xacro:property name="ax12_width" value="0.26" />
     <xacro:property name="ax12_height" value="0.5" />
     <xacro:property name="ax12_depth" value="0.4" />
@@ -9,14 +10,21 @@
     <xacro:property name="height1" value="2" /> <!-- Link 1 -->
     <xacro:property name="height2" value="1" /> <!-- Link 2 -->
     <xacro:property name="height3" value="1" /> <!-- Link 3 -->
+    <xacro:property name="base_height" value="0.5" />
     <xacro:property name="torso_origin">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${height2/2}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="link2_origin">
         <origin xyz="0 0 ${ax12_height/2 - axeleft_offset}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="link3_origin">
         <origin xyz="0 0 ${ax12_height/2 - axeleft_offset}" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="base_box">
+        <box size="0.5 1.0 ${base_height}"/>
+    </xacro:property>
+    <xacro:property name="base_origin">
+        <origin xyz="0 0 -${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="ax12_block">
         <box size="${ax12_width} ${ax12_depth} ${ax12_height}"/>
@@ -28,7 +36,6 @@
         <origin xyz="0.14 0.655 0.14" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="left_sho_pitch_bracket_origin">
-        <!-- <origin xyz="0.15 0.9 0.14" rpy="0 0 0"/> -->
         <origin xyz="0 0.245 0" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="left_sho_roll_joint_origin">
@@ -49,10 +56,42 @@
     <xacro:property name="left_elbow_block_origin">
         <origin xyz="0 -0.0168 -0.14" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="left_hand_origin">
+        <origin xyz="0 0 -0.4" rpy="0 0 0"/>
+    </xacro:property>
 
     <xacro:property name="right_sho_pitch_block_origin">
         <origin xyz="0 -0.45 0.14" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="right_sho_pitch_joint_origin">
+        <origin xyz="0.14 -0.655 0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_sho_pitch_bracket_origin">
+        <origin xyz="0 -0.245 0" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_sho_roll_joint_origin">
+        <origin xyz="0 -0.254 -0.161" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_sho_roll_block_origin">
+        <origin xyz="-0.01 0 -0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_elbow_bracket_joint_origin">
+        <origin xyz="0 0 -0.22" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_elbow_bracket_origin">
+        <origin xyz="0 0 -0.4" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_elbow_joint_origin">
+        <origin xyz="0.1599 0 -0.4085" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_elbow_block_origin">
+        <origin xyz="0 0.0168 -0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_hand_origin">
+        <origin xyz="0 0 -0.4" rpy="0 0 0"/>
+    </xacro:property>
+
+
     <xacro:property name="ax12_block_inertia">
         <inertia
             ixx="${mass/12.0*(ax12_width*ax12_width + ax12_height*ax12_height)}" ixy="0.0" ixz="0.0"
@@ -64,9 +103,39 @@
     <xacro:include filename="$(find test_description)/urdf/test.gazebo" />
 
     <link name="world" />
-    <joint name="fixed" type="fixed">
+    <joint name="base_fixed" type="fixed">
         <parent link="world"/>
+        <child link="base"/>
+    </joint>
+
+    <link name="base">
+        <collision>
+            <xacro:insert_block name="base_origin"/>
+            <geometry>
+                <xacro:insert_block name="base_box"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="base_origin"/>
+            <geometry>
+                <xacro:insert_block name="base_box"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="base_origin"/>
+            <mass value="${mass*2}"/>
+            <inertia
+                ixx="1.0" ixy="0.0" ixz="0.0"
+                iyy="1.0" iyz="0.0"
+                izz="1.0"/>
+        </inertial>
+    </link>
+
+    <joint name="torso_fixed" type="fixed">
+        <parent link="base"/>
         <child link="torso"/>
+        <origin xyz="0 0 ${base_height}" rpy="0 0 0"/>
     </joint>
 
     <!-- Base Link (Torso) -->
@@ -95,6 +164,7 @@
     <joint name="left_sho_block_mount" type="fixed">
         <parent link="torso"/>
         <child link="left_sho_pitch_block"/>
+        <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
     </joint>
 
     <!-- Middle Link -->
@@ -144,7 +214,7 @@
         </visual>
         <inertial>
             <xacro:insert_block name="left_sho_pitch_bracket_origin"/>
-            <mass value="${mass}"/>
+            <mass value="${bracket_mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
     </link>
@@ -202,7 +272,7 @@
         </visual>
         <inertial>
             <xacro:insert_block name="left_elbow_bracket_origin"/>
-            <mass value="${mass}"/>
+            <mass value="${bracket_mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
     </link>
@@ -236,11 +306,39 @@
         </inertial>
     </link>
 
+    <joint name="left_hand_joint" type="fixed">
+        <parent link="left_elbow_block"/>
+        <child link="left_hand"/>
+        <!-- <xacro:insert_block name="left_hand_origin"/> -->
+    </joint>
+
+    <link name="left_hand">
+        <collision>
+            <xacro:insert_block name="left_hand_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="left_hand_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/left_hand.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="left_hand_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
 
     <!-- end of Base Link -->
     <joint name="right_sho_block_mount" type="fixed">
         <parent link="torso"/>
         <child link="right_sho_pitch_block"/>
+        <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
     </joint>
 
     <!-- Middle Link -->
@@ -264,10 +362,97 @@
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
     </link>
+
+    <joint name="right_sho_roll" type="continuous">
+        <parent link="right_sho_pitch_bracket"/>
+        <child link="right_sho_roll_block"/>
+        <xacro:insert_block name="right_sho_roll_joint_origin"/>
+        <axis xyz="1 0 0"/>
+        <dynamics damping="0.7"/>
+    </joint>
+
+    <!-- Middle Link -->
+    <link name="right_sho_roll_block">
+        <collision>
+            <xacro:insert_block name="right_sho_roll_block_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_sho_roll_block_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/right_sho_roll.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_sho_roll_block_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <joint name="right_elbow_bracket_joint" type="fixed">
+        <parent link="right_sho_roll_block"/>
+        <child link="right_elbow_bracket"/>
+        <xacro:insert_block name="right_elbow_bracket_joint_origin"/>
+    </joint>
+
+    <!-- right Elbow -->
+    <link name="right_elbow_bracket">
+        <collision>
+            <xacro:insert_block name="right_elbow_bracket_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_elbow_bracket_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/right_elbow_bracket.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_elbow_bracket_origin"/>
+            <mass value="${bracket_mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
     <!-- end of Base Link -->
 
+    <joint name="right_sho_pitch" type="continuous">
+        <parent link="right_sho_pitch_block"/>
+        <child link="right_sho_pitch_bracket"/>
+        <origin xyz="0.14 -0.65 0.14" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.7"/>
+    </joint>
 
-    <link name="right_elbow_block">
+    <!-- right shoulder bracket -->
+    <link name="right_sho_pitch_bracket">
+        <collision>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/right_sho_pitch_bracket.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <mass value="${bracket_mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <!-- <link name="right_elbow_block">
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -277,7 +462,7 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/r_forearm2.dae"/>
+                <mesh filename="package://test_description/meshes/r_forearm2.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -286,25 +471,81 @@
             <mass value="${mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
-    </link>
+    </link> -->
 
-    <joint name="fixed3" type="fixed">
-        <parent link="world"/>
+    <joint name="right_elbow_joint" type="continuous">
+        <parent link="right_elbow_bracket"/>
         <child link="right_elbow_block"/>
-    </joint>
-
-    <!-- end of Base Link -->
-
-    <joint name="joint2" type="continuous">
-        <parent link="torso"/>
-        <child link="link3"/>
-        <origin xyz="0 ${ax12_depth} ${ax12_height - axeleft_offset}" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/>
+        <xacro:insert_block name="right_elbow_joint_origin"/>
+        <axis xyz="0 -1 0"/>
         <dynamics damping="0.7"/>
     </joint>
 
+    <link name="right_elbow_block">
+        <collision>
+            <xacro:insert_block name="right_elbow_block_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_elbow_block_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/right_elbow_pitch_fn.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_elbow_block_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <joint name="right_hand_joint" type="fixed">
+        <parent link="right_elbow_block"/>
+        <child link="right_hand"/>
+        <!-- <xacro:insert_block name="right_hand_origin"/> -->
+    </joint>
+
+    <link name="right_hand">
+        <collision>
+            <xacro:insert_block name="right_hand_origin"/>
+            <geometry>
+                <xacro:insert_block name="ax12_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_hand_origin"/>
+            <geometry>
+                <mesh filename="package://test_description/meshes2/right_hand2.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_hand_origin"/>
+            <mass value="${mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
+    <!-- <joint name="fixed3" type="fixed">
+        <parent link="world"/>
+        <child link="right_elbow_block"/>
+    </joint> -->
+
+    <!-- end of Base Link -->
+
+    <!-- <joint name="joint2" type="continuous">
+        <parent link="torso"/>
+        <child link="link3"/>
+        <origin xyz="0 ${ax12_depth} ${ax12_height - axeright_offset}" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.7"/>
+    </joint> -->
+
     <!-- Top Link -->
-    <link name="link3">
+    <!-- <link name="link3">
         <collision>
             <xacro:insert_block name="link3_origin"/>
             <geometry>
@@ -323,14 +564,14 @@
             <mass value="${mass}"/>
             <xacro:insert_block name="ax12_block_inertia"/>
         </inertial>
-    </link>
+    </link> -->
 
     <!-- end of Top Link -->
 
     <!-- Transmissions -->
     <transmission name="tran1">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="joint1">
+        <joint name="right_sho_pitch">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor1">
@@ -341,7 +582,7 @@
 
     <transmission name="tran2">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="joint2">
+        <joint name="left_sho_roll">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor2">
