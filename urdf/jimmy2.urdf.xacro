@@ -13,7 +13,6 @@
     <xacro:property name="base_height" value="1.0" />
     <xacro:property name="package_name" value="test_description" />
     <xacro:property name="mesh_dir" value="meshes2" />
-
     <xacro:property name="torso_origin">
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
@@ -38,6 +37,9 @@
     <xacro:property name="left_sho_pitch_block_origin">
         <origin xyz="0 0.45 0.14" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="left_sho_pitch_block_collision_origin">
+        <origin xyz="0 0.46 0.14" rpy="0 1.5708 0"/>
+    </xacro:property>
     <xacro:property name="left_sho_pitch_joint_origin">
         <origin xyz="0.14 0.655 0.14" rpy="0 0 0"/>
     </xacro:property>
@@ -49,6 +51,9 @@
     </xacro:property>
     <xacro:property name="left_sho_roll_block_origin">
         <origin xyz="-0.01 0 -0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="left_sho_roll_block_collision_origin">
+        <origin xyz="0 0 -0.14" rpy="0 0 1.5708"/>
     </xacro:property>
     <xacro:property name="left_elbow_bracket_joint_origin">
         <origin xyz="0 0 -0.22" rpy="0 0 0"/>
@@ -65,9 +70,16 @@
     <xacro:property name="left_hand_origin">
         <origin xyz="0 0 -0.4" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="left_hand_collision_origin">
+        <origin xyz="0 0 -0.55" rpy="0 0 0"/>
+    </xacro:property>
 
+    <!-- Right Arm -->
     <xacro:property name="right_sho_pitch_block_origin">
         <origin xyz="0 -0.44 0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_sho_pitch_block_collision_origin">
+        <origin xyz="0 -0.45 0.14" rpy="0 1.5708 0"/>
     </xacro:property>
     <xacro:property name="right_sho_pitch_joint_origin">
         <origin xyz="0.14 -0.655 0.14" rpy="0 0 0"/>
@@ -80,6 +92,9 @@
     </xacro:property>
     <xacro:property name="right_sho_roll_block_origin">
         <origin xyz="-0.01 0 -0.14" rpy="0 0 0"/>
+    </xacro:property>
+    <xacro:property name="right_sho_roll_block_collision_origin">
+        <origin xyz="0 0 -0.14" rpy="0 0 1.5708"/>
     </xacro:property>
     <xacro:property name="right_elbow_bracket_joint_origin">
         <origin xyz="0 0 -0.22" rpy="0 0 0"/>
@@ -96,6 +111,11 @@
     <xacro:property name="right_hand_origin">
         <origin xyz="0 0 -0.4" rpy="0 0 0"/>
     </xacro:property>
+    <xacro:property name="right_hand_collision_origin">
+        <origin xyz="0 0 -0.55" rpy="0 0 0"/>
+    </xacro:property>
+
+    <!-- Neck/Head -->
     <xacro:property name="neck_pan_joint_origin">
         <origin xyz="0.2 0 0.87" rpy="0 0 0"/>
     </xacro:property>
@@ -121,6 +141,9 @@
         <origin xyz="-0.12 0 0.222" rpy="0 0 0"/>
     </xacro:property>
 
+    <xacro:property name="bracket_collision_block">
+        <box size="0.0001 0.0001 0.0001"/>
+    </xacro:property>
 
     <xacro:property name="ax12_block_inertia">
         <inertia
@@ -202,7 +225,7 @@
     <!-- Middle Link -->
     <link name="left_sho_pitch_block">
         <collision>
-            <xacro:insert_block name="left_sho_pitch_block_origin"/>
+            <xacro:insert_block name="left_sho_pitch_block_collision_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -234,7 +257,7 @@
         <collision>
             <xacro:insert_block name="left_sho_pitch_bracket_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <xacro:insert_block name="bracket_collision_block"/>
             </geometry>
         </collision>
         <visual>
@@ -262,7 +285,7 @@
     <!-- Middle Link -->
     <link name="left_sho_roll_block">
         <collision>
-            <xacro:insert_block name="left_sho_roll_block_origin"/>
+            <xacro:insert_block name="left_sho_roll_block_collision_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -292,7 +315,7 @@
         <collision>
             <xacro:insert_block name="left_elbow_bracket_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <xacro:insert_block name="bracket_collision_block"/>
             </geometry>
         </collision>
         <visual>
@@ -346,9 +369,10 @@
 
     <link name="left_hand">
         <collision>
-            <xacro:insert_block name="left_hand_origin"/>
+            <xacro:insert_block name="left_hand_collision_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <!-- <xacro:insert_block name="ax12_block"/> -->
+                <box size="0.4 0.4 0.95" />
             </geometry>
         </collision>
         <visual>
@@ -376,7 +400,7 @@
     <!-- Middle Link -->
     <link name="right_sho_pitch_block">
         <collision>
-            <xacro:insert_block name="right_sho_pitch_block_origin"/>
+            <xacro:insert_block name="right_sho_pitch_block_collision_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -395,6 +419,36 @@
         </inertial>
     </link>
 
+    <joint name="right_sho_pitch" type="continuous">
+        <parent link="right_sho_pitch_block"/>
+        <child link="right_sho_pitch_bracket"/>
+        <origin xyz="0.14 -0.65 0.14" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.7"/>
+    </joint>
+
+    <!-- right shoulder bracket -->
+    <link name="right_sho_pitch_bracket">
+        <collision>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <geometry>
+                <xacro:insert_block name="bracket_collision_block"/>
+            </geometry>
+        </collision>
+        <visual>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <geometry>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_sho_pitch_bracket.dae"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <inertial>
+            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
+            <mass value="${bracket_mass}"/>
+            <xacro:insert_block name="ax12_block_inertia"/>
+        </inertial>
+    </link>
+
     <joint name="right_sho_roll" type="continuous">
         <parent link="right_sho_pitch_bracket"/>
         <child link="right_sho_roll_block"/>
@@ -406,7 +460,7 @@
     <!-- Middle Link -->
     <link name="right_sho_roll_block">
         <collision>
-            <xacro:insert_block name="right_sho_roll_block_origin"/>
+            <xacro:insert_block name="right_sho_roll_block_collision_origin"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -436,7 +490,7 @@
         <collision>
             <xacro:insert_block name="right_elbow_bracket_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <xacro:insert_block name="bracket_collision_block"/>
             </geometry>
         </collision>
         <visual>
@@ -453,57 +507,6 @@
         </inertial>
     </link>
     <!-- end of Base Link -->
-
-    <joint name="right_sho_pitch" type="continuous">
-        <parent link="right_sho_pitch_block"/>
-        <child link="right_sho_pitch_bracket"/>
-        <origin xyz="0.14 -0.65 0.14" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/>
-        <dynamics damping="0.7"/>
-    </joint>
-
-    <!-- right shoulder bracket -->
-    <link name="right_sho_pitch_bracket">
-        <collision>
-            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
-            <geometry>
-                <xacro:insert_block name="ax12_block"/>
-            </geometry>
-        </collision>
-        <visual>
-            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
-            <geometry>
-                <mesh filename="package://${package_name}/${mesh_dir}/right_sho_pitch_bracket.dae"/>
-            </geometry>
-            <material name="black"/>
-        </visual>
-        <inertial>
-            <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
-            <mass value="${bracket_mass}"/>
-            <xacro:insert_block name="ax12_block_inertia"/>
-        </inertial>
-    </link>
-
-    <!-- <link name="right_elbow_block">
-        <collision>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <geometry>
-                <xacro:insert_block name="ax12_block"/>
-            </geometry>
-        </collision>
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <geometry>
-                <mesh filename="package://test_description/meshes/r_forearm2.dae"/>
-            </geometry>
-            <material name="black"/>
-        </visual>
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <mass value="${mass}"/>
-            <xacro:insert_block name="ax12_block_inertia"/>
-        </inertial>
-    </link> -->
 
     <joint name="right_elbow_joint" type="continuous">
         <parent link="right_elbow_bracket"/>
@@ -542,9 +545,10 @@
 
     <link name="right_hand">
         <collision>
-            <xacro:insert_block name="right_hand_origin"/>
+            <xacro:insert_block name="right_hand_collision_origin"/>
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <!-- <xacro:insert_block name="ax12_block"/> -->
+                <box size="0.4 0.4 0.95" />
             </geometry>
         </collision>
         <visual>
