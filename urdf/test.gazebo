@@ -54,4 +54,11 @@
         <self_collide>1</self_collide>
     </gazebo>
 
+    <gazebo reference="neck_pan_block">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="head_tilt_block">
+        <self_collide>1</self_collide>
+    </gazebo>
 </robot>

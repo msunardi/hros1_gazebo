@@ -566,12 +566,13 @@
     </link>
     <!-- end of Top Link -->
 
-    <joint name="neck_pan" type="continuous">
+    <joint name="neck_pan" type="revolute">
         <parent link="torso"/>
         <child link="neck_pan_block"/>
         <xacro:insert_block name="neck_pan_joint_origin"/>
         <axis xyz="0 0 1"/>
         <dynamics damping="0.7"/>
+        <limit lower="-1.6807" upper="1.6807" effort="0.5" velocity="0.7"/>
     </joint>
 
     <link name="neck_pan_block">
@@ -625,12 +626,13 @@
         </inertial>
     </link>
 
-    <joint name="neck_tilt_bottom_bracket_passive_joint" type="continuous">
+    <joint name="neck_tilt_bottom_bracket_joint" type="revolute">
         <parent link="neck_pan_top_bracket" />
         <child link="neck_tilt_bottom_bracket" />
         <xacro:insert_block name="neck_tilt_bottom_bracket_joint_origin"/>
         <axis xyz="0 1.0 0"/>
         <dynamics damping="0.7"/>
+        <limit lower="-0.2807" upper="0.5807" effort="0.5" velocity="0.7"/>
     </joint>
 
     <link name="neck_tilt_bottom_bracket">
