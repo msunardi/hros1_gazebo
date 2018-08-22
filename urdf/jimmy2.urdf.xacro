@@ -13,6 +13,7 @@
     <xacro:property name="base_height" value="1.0" />
     <xacro:property name="package_name" value="test_description" />
     <xacro:property name="mesh_dir" value="meshes2" />
+
     <xacro:property name="torso_origin">
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
@@ -170,9 +171,11 @@
     <!-- Base Link (Torso) -->
     <link name="torso">
         <collision>
-            <xacro:insert_block name="torso_origin"/>
+            <!-- <xacro:insert_block name="torso_origin"/> -->
+            <origin xyz="0.13 0 -0.3" rpy="0 0 0" />
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <!-- <xacro:insert_block name="ax12_block"/> -->
+                <box size="0.77 1.2 2.4"/>
             </geometry>
         </collision>
         <visual>
