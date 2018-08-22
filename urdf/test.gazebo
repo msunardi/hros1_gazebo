@@ -26,4 +26,32 @@
         <material>Gazebo/Orange</material>
     </gazebo>
 
+    <gazebo reference="torso">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="right_hand">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="left_hand">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="left_sho_roll_block">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="right_sho_roll_block">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="neck_pan_top_bracket">
+        <self_collide>1</self_collide>
+    </gazebo>
+
+    <gazebo reference="neck_tilt_bottom_bracket">
+        <self_collide>1</self_collide>
+    </gazebo>
+
 </robot>
