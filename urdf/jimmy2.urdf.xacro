@@ -2,7 +2,7 @@
 <robot name="test_myrobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:property name="mass" value="0.2" />
     <xacro:property name="bracket_mass" value="0.01" />
-    <xacro:property name="ax12_width" value="0.26" />
+    <xacro:property name="ax12_width" value="0.27" />
     <xacro:property name="ax12_height" value="0.5" />
     <xacro:property name="ax12_depth" value="0.4" />
     <xacro:property name="axeleft_offset" value="0.25" /> <!-- Space btw top of beam and the each joint -->
@@ -11,6 +11,8 @@
     <xacro:property name="height2" value="1" /> <!-- Link 2 -->
     <xacro:property name="height3" value="1" /> <!-- Link 3 -->
     <xacro:property name="base_height" value="1.0" />
+    <xacro:property name="package_name" value="test_description" />
+    <xacro:property name="mesh_dir" value="meshes2" />
     <xacro:property name="torso_origin">
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
@@ -27,6 +29,9 @@
         <origin xyz="0 0 -${base_height/2}" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="ax12_block">
+        <box size="${ax12_width} ${ax12_depth} ${ax12_height}"/>
+    </xacro:property>
+    <xacro:property name="ax12_block_collision">
         <box size="${ax12_width} ${ax12_depth} ${ax12_height}"/>
     </xacro:property>
     <xacro:property name="left_sho_pitch_block_origin">
@@ -112,8 +117,9 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:property>
     <xacro:property name="head_tilt_block_origin">
-        <origin xyz="-0.12 0 0.22" rpy="0 0 0"/>
+        <origin xyz="-0.12 0 0.222" rpy="0 0 0"/>
     </xacro:property>
+
 
     <xacro:property name="ax12_block_inertia">
         <inertia
@@ -172,7 +178,7 @@
         <visual>
             <xacro:insert_block name="torso_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/torso.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/torso.dae"/>
             </geometry>
             <material name="orange"/>
         </visual>
@@ -201,7 +207,7 @@
         <visual>
             <xacro:insert_block name="left_sho_pitch_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_sho_pitch.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_sho_pitch.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -231,7 +237,7 @@
         <visual>
             <xacro:insert_block name="left_sho_pitch_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_sho_pitch_bracket.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_sho_pitch_bracket.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -261,7 +267,7 @@
         <visual>
             <xacro:insert_block name="left_sho_roll_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_sho_roll.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_sho_roll.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -289,7 +295,7 @@
         <visual>
             <xacro:insert_block name="left_elbow_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_elbow_bracket.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_elbow_bracket.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -318,7 +324,7 @@
         <visual>
             <xacro:insert_block name="left_elbow_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_elbow_pitch.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_elbow_pitch.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -345,7 +351,7 @@
         <visual>
             <xacro:insert_block name="left_hand_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/left_hand.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/left_hand.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -375,7 +381,7 @@
         <visual>
             <xacro:insert_block name="right_sho_pitch_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_sho_pitch.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_sho_pitch.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -405,7 +411,7 @@
         <visual>
             <xacro:insert_block name="right_sho_roll_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_sho_roll.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_sho_roll.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -433,7 +439,7 @@
         <visual>
             <xacro:insert_block name="right_elbow_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_elbow_bracket.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_elbow_bracket.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -464,7 +470,7 @@
         <visual>
             <xacro:insert_block name="right_sho_pitch_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_sho_pitch_bracket.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_sho_pitch_bracket.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -514,7 +520,7 @@
         <visual>
             <xacro:insert_block name="right_elbow_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_elbow_pitch_fn.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_elbow_pitch_fn.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -541,7 +547,7 @@
         <visual>
             <xacro:insert_block name="right_hand_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/right_hand2.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/right_hand2.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -563,7 +569,8 @@
 
     <link name="neck_pan_block">
         <collision>
-            <xacro:insert_block name="neck_pan_block_origin"/>
+            <!-- <xacro:insert_block name="neck_pan_block_origin"/> -->
+            <origin xyz="-0.1385 0 0.218" rpy="1.5708 0 1.5708"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -571,7 +578,7 @@
         <visual>
             <xacro:insert_block name="neck_pan_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/neck_base.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/neck_base.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -590,15 +597,17 @@
 
     <link name="neck_pan_top_bracket">
         <collision>
-            <xacro:insert_block name="neck_pan_top_bracket_origin"/>
+            <!-- <xacro:insert_block name="neck_pan_top_bracket_origin"/> -->
+            <origin xyz="0 0 0.0168" rpy="0 0 0" />
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <!-- <xacro:insert_block name="ax12_block"/> -->
+                <box size="${ax12_height} ${ax12_depth} 0.058" />
             </geometry>
         </collision>
         <visual>
             <xacro:insert_block name="neck_pan_top_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/neck_bottom.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/neck_bottom.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -619,15 +628,17 @@
 
     <link name="neck_tilt_bottom_bracket">
         <collision>
-            <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/>
+            <!-- <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/> -->
+            <origin xyz="-0.12 0 0.07" rpy="0 0 0" />
             <geometry>
-                <xacro:insert_block name="ax12_block"/>
+                <!-- <xacro:insert_block name="ax12_block"/> -->
+                <box size="${ax12_height} ${ax12_depth} 0.05" />
             </geometry>
         </collision>
         <visual>
             <xacro:insert_block name="neck_tilt_bottom_bracket_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/neck_top.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/head_top_bracket.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
@@ -646,7 +657,8 @@
 
     <link name="head_tilt_block">
         <collision>
-            <xacro:insert_block name="head_tilt_block_origin"/>
+            <!-- <xacro:insert_block name="head_tilt_block_origin"/> -->
+            <origin xyz="-0.12 0 0.222" rpy="1.5708 1.5708 1.5708"/>
             <geometry>
                 <xacro:insert_block name="ax12_block"/>
             </geometry>
@@ -654,7 +666,7 @@
         <visual>
             <xacro:insert_block name="head_tilt_block_origin"/>
             <geometry>
-                <mesh filename="package://test_description/meshes2/head_tilt.dae"/>
+                <mesh filename="package://${package_name}/${mesh_dir}/head_tilt.dae"/>
             </geometry>
             <material name="black"/>
         </visual>
