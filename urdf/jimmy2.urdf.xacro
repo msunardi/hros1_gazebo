@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="test_myrobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="jimmy2" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:property name="mass" value="0.2" />
     <xacro:property name="bracket_mass" value="0.01" />
     <xacro:property name="ax12_width" value="0.27" />
@@ -11,7 +11,7 @@
     <xacro:property name="height2" value="1" /> <!-- Link 2 -->
     <xacro:property name="height3" value="1" /> <!-- Link 3 -->
     <xacro:property name="base_height" value="1.0" />
-    <xacro:property name="package_name" value="test_description" />
+    <xacro:property name="package_name" value="jimmy2_description" />
     <xacro:property name="mesh_dir" value="meshes2" />
     <xacro:property name="torso_origin">
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
@@ -153,7 +153,7 @@
     </xacro:property>
 
     <!-- Import Gazebo-customization stuff -->
-    <xacro:include filename="$(find test_description)/urdf/test.gazebo" />
+    <xacro:include filename="$(find jimmy2_description)/urdf/test.gazebo" />
 
     <link name="world" />
     <joint name="base_fixed" type="fixed">
@@ -332,7 +332,7 @@
         </inertial>
     </link>
 
-    <joint name="left_elbow_joint" type="continuous">
+    <joint name="left_elbow" type="continuous">
         <parent link="left_elbow_bracket"/>
         <child link="left_elbow_block"/>
         <xacro:insert_block name="left_elbow_joint_origin"/>
@@ -419,13 +419,23 @@
         </inertial>
     </link>
 
+    <!-- <joint name="right_sho_pitch" type="revolute">
+        <parent link="right_sho_pitch_block"/>
+        <child link="right_sho_pitch_bracket"/>
+        <origin xyz="0.14 -0.65 0.14" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>
+        <dynamics damping="0.7"/>
+        <limit lower="-0.2807" upper="3.1614" effort="0.5" velocity="0.7"/>
+    </joint> -->
+
     <joint name="right_sho_pitch" type="continuous">
         <parent link="right_sho_pitch_block"/>
         <child link="right_sho_pitch_bracket"/>
         <origin xyz="0.14 -0.65 0.14" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/>
+        <axis xyz="0 -1 0"/>
         <dynamics damping="0.7"/>
     </joint>
+
 
     <!-- right shoulder bracket -->
     <link name="right_sho_pitch_bracket">
@@ -508,7 +518,7 @@
     </link>
     <!-- end of Base Link -->
 
-    <joint name="right_elbow_joint" type="continuous">
+    <joint name="right_elbow" type="continuous">
         <parent link="right_elbow_bracket"/>
         <child link="right_elbow_block"/>
         <xacro:insert_block name="right_elbow_joint_origin"/>
@@ -626,12 +636,12 @@
         </inertial>
     </link>
 
-    <joint name="neck_tilt_bottom_bracket_joint" type="revolute">
+    <joint name="neck_tilt" type="revolute">
         <parent link="neck_pan_top_bracket" />
         <child link="neck_tilt_bottom_bracket" />
         <xacro:insert_block name="neck_tilt_bottom_bracket_joint_origin"/>
-        <axis xyz="0 1.0 0"/>
-        <dynamics damping="0.7"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.2"/>
         <limit lower="-0.2807" upper="0.5807" effort="0.5" velocity="0.7"/>
     </joint>
 
@@ -687,7 +697,7 @@
     </link>
 
     <!-- Transmissions -->
-    <transmission name="tran1">
+    <transmission name="right_sho_pitch_tran">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="right_sho_pitch">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
@@ -698,7 +708,7 @@
         </actuator>
     </transmission>
 
-    <transmission name="tran2">
+    <transmission name="left_sho_roll_tran">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="left_sho_roll">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
@@ -709,6 +719,76 @@
         </actuator>
     </transmission>
 
+    <transmission name="left_sho_pitch_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="left_sho_pitch">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor3">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="right_sho_roll_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_sho_roll">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor4">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="left_elbow_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="left_elbow">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor5">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="right_elbow_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_elbow">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor6">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="neck_pan_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="neck_pan">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor7">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="neck_tilt_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="neck_tilt">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor8">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
     <!-- Connect Gazebo to ROS -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/jimmy2</robotNamespace><!-- important - namespace mustbe correct -->
+        </plugin>
+    </gazebo>
     <!-- see test.gazebo -->
 </robot>

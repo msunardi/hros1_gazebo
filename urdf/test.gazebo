@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <!-- Supplemental file to support conversion of urdf/xacro to gazebo -->
 <robot>
-    <gazebo>
-        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/test</robotNamespace><!-- important - namespace mustbe correct -->
-        </plugin>
-    </gazebo>
 
     <!-- Link1 -->
     <gazebo reference="link1">
